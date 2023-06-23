@@ -1,9 +1,8 @@
 import { useDispatch } from 'react-redux';
-
-
 import {  useEffect, useState } from "react";
 import StyledForm from './AddContact.styled';
 import { addContact } from 'redux/operations';
+import { useSelector } from 'react-redux';
 
 /* import PropTypes from 'prop-types'; */
 
@@ -12,9 +11,9 @@ const AddContact = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState(''); 
   const [validated, setValidated] = useState(true)
+  const contacts = useSelector(state => state.contacts.contacts)
 
 
-  /* const numberInputId = nanoid(); */
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -41,15 +40,24 @@ const AddContact = () => {
   },[name,number])
  
   const handleSubmit = e => {
-    /*  event.preventDefault();
-     submitForm({name,number});
-     reset();
-     console.log(name, number); */
+      e.preventDefault();
+      
+      
+    const finder= contacts.map((contact)=>{
+      
+      if(contact.name===name){
+        
+        const vary = 'true'
+        return vary
+      }
 
-    e.preventDefault();
-    
-    
-     
+      return false
+      
+    })
+    if(finder.find(findtrue => findtrue === 'true')){
+      alert("Contact already in the list")
+    }
+    else{
       dispatch(addContact({
        
         nameInfo: name,
@@ -57,6 +65,11 @@ const AddContact = () => {
         
         
       }));
+      alert("Contact Successfully Added to the contact list")
+    }
+    
+     
+      
     
     setValidated(true);
     reset();
